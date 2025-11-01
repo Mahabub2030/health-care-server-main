@@ -1,0 +1,53 @@
+import express from "express";
+import { authRoutes } from "../modules/auth/auth.routes";
+import { ScheduleRoutes } from "../modules/schedule/schedule.routes";
+import { userRoutes } from "../modules/user/user.router";
+
+const router = express.Router();
+
+const moduleRoutes = [
+  {
+    path: "/user",
+    route: userRoutes,
+  },
+  {
+    path: "/auth",
+    route: authRoutes,
+  },
+  {
+    path: "/schedule",
+    route: ScheduleRoutes,
+  },
+  // {
+  //     path: '/doctor-schedule',
+  //     route: doctorScheduleRoutes
+  // },
+  // {
+  //     path: '/specialties',
+  //     route: SpecialtiesRoutes
+  // },
+  // {
+  //     path: '/doctor',
+  //     route: DoctorRoutes
+  // },
+  // {
+  //     path: '/admin',
+  //     route: AdminRoutes
+  // },
+  // {
+  //     path: '/patient',
+  //     route: PatientRoutes
+  // },
+  // {
+  //     path: '/appointment',
+  //     route: AppointmentRoutes
+  // },
+  // {
+  //     path: '/prescription',
+  //     route: PrescriptionRoutes
+  // },
+];
+
+moduleRoutes.forEach((route) => router.use(route.path, route.route));
+
+export default router;

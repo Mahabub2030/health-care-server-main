@@ -1,0 +1,132 @@
+-- CreateEnum
+CREATE TYPE "AppointmentStatus" AS ENUM ('SCHEDULED', 'INPROGRESS', 'COMPLETED', 'CANCEL');
+
+-- CreateEnum
+CREATE TYPE "PaymentStatus" AS ENUM ('PAID', 'UNPAID');
+
+-- AlterTable
+ALTER TABLE "patients" ALTER COLUMN "address" DROP NOT NULL;
+
+-- CreateTable
+CREATE TABLE "appointments" (
+    "id" TEXT NOT NULL,
+    "patientId" TEXT NOT NULL,
+    "doctorId" TEXT NOT NULL,
+    "scheduleId" TEXT NOT NULL,
+    "videoCallingId" TEXT NOT NULL,
+    "status" "AppointmentStatus" NOT NULL DEFAULT 'SCHEDULED',
+    "paymentStatus" "PaymentStatus" NOT NULL DEFAULT 'UNPAID',
+    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updateAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "appointments_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "payments" (
+    "id" TEXT NOT NULL,
+    "appointmentId" TEXT NOT NULL,
+    "amount" DOUBLE PRECISION NOT NULL,
+    "transactionId" TEXT NOT NULL,
+    "status" "PaymentStatus" NOT NULL DEFAULT 'UNPAID',
+    "paymentGatewayData" JSONB,
+    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updateAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "payments_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "prescriptions" (
+    "id" TEXT NOT NULL,
+    "appointmentId" TEXT NOT NULL,
+    "doctorId" TEXT NOT NULL,
+    "patientId" TEXT NOT NULL,
+    "instructions" TEXT NOT NULL,
+    "followUpDate" TIMESTAMP(3),
+    "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updateAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "prescriptions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "schedules" (
+    "id" TEXT NOT NULL,
+    "startDateTime" TIMESTAMP(3) NOT NULL,
+    "endDateTime" TIMESTAMP(3) NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "schedules_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "doctor_schedules" (
+    "doctorId" TEXT NOT NULL,
+    "scheduleId" TEXT NOT NULL,
+    "isBooked" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "doctor_schedules_pkey" PRIMARY KEY ("doctorId","scheduleId")
+);
+
+-- CreateTable
+CREATE TABLE "specialties" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "icon" TEXT NOT NULL,
+
+    CONSTRAINT "specialties_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "doctor_specialties" (
+    "specialitiesId" TEXT NOT NULL,
+    "doctorId" TEXT NOT NULL,
+
+    CONSTRAINT "doctor_specialties_pkey" PRIMARY KEY ("specialitiesId","doctorId")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "payments_appointmentId_key" ON "payments"("appointmentId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "payments_transactionId_key" ON "payments"("transactionId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "prescriptions_appointmentId_key" ON "prescriptions"("appointmentId");
+
+-- AddForeignKey
+ALTER TABLE "appointments" ADD CONSTRAINT "appointments_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "patients"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "appointments" ADD CONSTRAINT "appointments_doctorId_fkey" FOREIGN KEY ("doctorId") REFERENCES "doctors"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "appointments" ADD CONSTRAINT "appointments_scheduleId_fkey" FOREIGN KEY ("scheduleId") REFERENCES "schedules"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "payments" ADD CONSTRAINT "payments_appointmentId_fkey" FOREIGN KEY ("appointmentId") REFERENCES "appointments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "prescriptions" ADD CONSTRAINT "prescriptions_appointmentId_fkey" FOREIGN KEY ("appointmentId") REFERENCES "appointments"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "prescriptions" ADD CONSTRAINT "prescriptions_doctorId_fkey" FOREIGN KEY ("doctorId") REFERENCES "doctors"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "prescriptions" ADD CONSTRAINT "prescriptions_patientId_fkey" FOREIGN KEY ("patientId") REFERENCES "patients"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "doctor_schedules" ADD CONSTRAINT "doctor_schedules_doctorId_fkey" FOREIGN KEY ("doctorId") REFERENCES "doctors"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "doctor_schedules" ADD CONSTRAINT "doctor_schedules_scheduleId_fkey" FOREIGN KEY ("scheduleId") REFERENCES "schedules"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "doctor_specialties" ADD CONSTRAINT "doctor_specialties_specialitiesId_fkey" FOREIGN KEY ("specialitiesId") REFERENCES "specialties"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "doctor_specialties" ADD CONSTRAINT "doctor_specialties_doctorId_fkey" FOREIGN KEY ("doctorId") REFERENCES "doctors"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
