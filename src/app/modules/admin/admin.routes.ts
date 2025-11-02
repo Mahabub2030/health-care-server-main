@@ -8,6 +8,7 @@ import { adminValidationSchemas } from "./admin.validations";
 const router = express.Router();
 
 router.get("/", auth(UserRole.ADMIN), AdminController.getAllFromDB);
+// router.get("/", AdminController.getAllFromDB);
 
 router.get("/:id", auth(UserRole.ADMIN), AdminController.getByIdFromDB);
 

@@ -3,7 +3,8 @@ import { Request } from "express";
 import { prisma } from "../../shared/prisma";
 
 import { Admin, Doctor, Prisma, UserRole } from "@prisma/client";
-import { fileUploder } from "../../helpers/fileUpdate";
+
+import { fileUploder } from "../../helpers/fileUploader";
 import { IOptions, paginationHelper } from "../../helpers/paginationHelper";
 import { userSearchableFields } from "./user.constant";
 

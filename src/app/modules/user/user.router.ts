@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import { UserController } from "./user.controller";
 
-import { fileUploder } from "../../helpers/fileUpdate";
+import { fileUploder } from "../../helpers/fileUploader";
 import { UserValidation } from "./user.validation";
 
 const router = express.Router();
