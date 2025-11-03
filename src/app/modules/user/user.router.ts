@@ -1,12 +1,20 @@
+import { UserRole } from "@prisma/client";
 import express, { NextFunction, Request, Response } from "express";
-import { UserController } from "./user.controller";
 
 import { fileUploder } from "../../helpers/fileUploader";
+import auth from "../../middlewares/auth";
+import { UserController } from "./user.controller";
 import { UserValidation } from "./user.validation";
 
 const router = express.Router();
 
-router.get("/", UserController.getAllFromDB);
+router.get("/", auth(UserRole.ADMIN), UserController.getAllFromDB);
+
+router.get(
+  "/me",
+  auth(UserRole.ADMIN, UserRole.DOCTOR, UserRole.PATIENT),
+  UserController.getMyProfile
+);
 
 router.post(
   "/create-patient",
@@ -21,7 +29,7 @@ router.post(
 
 router.post(
   "/create-admin",
-  // auth(UserRole.ADMIN),
+  auth(UserRole.ADMIN),
   fileUploder.upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = UserValidation.createAdminValidationSchema.parse(
@@ -33,7 +41,7 @@ router.post(
 
 router.post(
   "/create-doctor",
-  // auth(UserRole.ADMIN),
+  auth(UserRole.ADMIN),
   fileUploder.upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
     console.log(JSON.parse(req.body.data));
@@ -41,6 +49,22 @@ router.post(
       JSON.parse(req.body.data)
     );
     return UserController.createDoctor(req, res, next);
+  }
+);
+
+router.patch(
+  "/:id/status",
+  auth(UserRole.ADMIN),
+  UserController.changeProfileStatus
+);
+
+router.patch(
+  "/update-my-profile",
+  auth(UserRole.ADMIN, UserRole.DOCTOR, UserRole.PATIENT),
+  fileUploder.upload.single("file"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    return UserController.updateMyProfie(req, res, next);
   }
 );
 
