@@ -27,13 +27,13 @@ const login = async (payload: { email: string; password: string }) => {
 
   const accessToken = jwtHelper.generateToken(
     { email: user.email, role: user.role },
-    config.JWT.ACCESS_TOKEN_SECRET as Secret,
+    config.JWT.access_token_secret as Secret,
     "1h"
   );
 
   const refreshToken = jwtHelper.generateToken(
     { email: user.email, role: user.role },
-    config.JWT.REFRESH_TOKEN_SECRET as Secret,
+    config.JWT.refresh_token_secret as Secret,
     "90d"
   );
 
@@ -49,7 +49,7 @@ const refreshToken = async (token: string) => {
   try {
     decodedData = jwtHelper.verifyToken(
       token,
-      config.JWT.REFRESH_TOKEN_SECRET as Secret
+      config.JWT.refresh_token_secret as Secret
     );
   } catch (err) {
     throw new Error("You are not authorized!");
@@ -67,8 +67,8 @@ const refreshToken = async (token: string) => {
       email: userData.email,
       role: userData.role,
     },
-    config.JWT.ACCESS_TOKEN_SECRET as Secret,
-    config.JWT.ACCESS_TOKEN_EXPIRATION as string
+    config.JWT.access_token_secret as Secret,
+    config.JWT.access_token_expiration as string
   );
 
   return {
@@ -190,7 +190,7 @@ const getMe = async (session: any) => {
   const accessToken = session.accessToken;
   const decodedData = jwtHelper.verifyToken(
     accessToken,
-    config.JWT.ACCESS_TOKEN_SECRET as Secret
+    config.JWT.access_token_secret as Secret
   );
 
   const userData = await prisma.user.findUniqueOrThrow({

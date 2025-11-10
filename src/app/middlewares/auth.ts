@@ -17,7 +17,7 @@ const auth = (...roles: string[]) => {
 
       const verifyUser = jwtHelper.verifyToken(
         token,
-        config.JWT.ACCESS_TOKEN_SECRET as string
+        config.JWT.access_token_secret as string
       );
 
       req.user = verifyUser;
