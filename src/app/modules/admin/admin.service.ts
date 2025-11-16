@@ -65,7 +65,7 @@ const getAllFromDB = async (params: IAdminFilterRequest, options: IOptions) => {
     data: result,
   };
 };
-
+// data take by id
 const getByIdFromDB = async (id: string): Promise<Admin | null> => {
   const result = await prisma.admin.findUnique({
     where: {
