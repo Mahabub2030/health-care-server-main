@@ -1,7 +1,7 @@
 import { Doctor, Prisma, UserStatus } from "@prisma/client";
+
 import httpStatus from "http-status";
 import ApiError from "../../errors/ApiError";
-
 import { extractJsonFromMessage } from "../../helpers/extractJsonFromMessage";
 import { openai } from "../../helpers/open-router";
 import { IOptions, paginationHelper } from "../../helpers/paginationHelper";

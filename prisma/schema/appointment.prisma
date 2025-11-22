@@ -1,3 +1,7 @@
+import { Doctor, Patient } from "user"
+import { Schedule } from "schedule"
+import { AppointmentStatus, PaymentStatus } from "enum"
+
 model Appointment {
   id             String             @id @default(uuid())
   patientId      String
