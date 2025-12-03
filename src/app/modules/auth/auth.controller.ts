@@ -52,7 +52,6 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// changePassword here
 const changePassword = catchAsync(
   async (req: Request & { user?: any }, res: Response) => {
     const user = req.user;
