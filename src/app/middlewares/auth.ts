@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response } from "express";
+
+import httpStatus from "http-status";
+import { Secret } from "jsonwebtoken";
 import config from "../../config";
+import ApiError from "../errors/ApiError";
 import { jwtHelper } from "../helpers/jwtHelper";
 
 const auth = (...roles: string[]) => {
@@ -12,18 +16,18 @@ const auth = (...roles: string[]) => {
       const token = req.cookies.accessToken;
 
       if (!token) {
-        throw new Error("You are not authorized!");
+        throw new ApiError(httpStatus.UNAUTHORIZED, "You are not authorized!");
       }
 
       const verifyUser = jwtHelper.verifyToken(
         token,
-        config.JWT.access_token_secret as string
+        config.JWT.access_token_secret as Secret
       );
 
       req.user = verifyUser;
 
       if (roles.length && !roles.includes(verifyUser.role)) {
-        throw new Error("You are not authorized!");
+        throw new ApiError(httpStatus.UNAUTHORIZED, "You are not authorized!");
       }
 
       next();
@@ -32,5 +36,7 @@ const auth = (...roles: string[]) => {
     }
   };
 };
+
+console.log("Secret used for verification:", config.JWT.access_token_secret);
 
 export default auth;

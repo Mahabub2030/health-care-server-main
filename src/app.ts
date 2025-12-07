@@ -1,5 +1,6 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import dotenv from "dotenv";
 import express, { Application, Request, Response } from "express";
 import cron from "node-cron";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
@@ -8,8 +9,9 @@ import { AppointmentService } from "./app/modules/appointment/appointment.servic
 import { PaymentController } from "./app/modules/payment/payment.controller";
 import router from "./app/routes";
 import config from "./config";
-const app: Application = express();
 
+const app: Application = express();
+dotenv.config();
 app.post(
   "/webhook",
   express.raw({ type: "application/json" }),

@@ -4,7 +4,6 @@ import httpStatus from "http-status";
 import { Secret } from "jsonwebtoken";
 import config from "../../../config";
 import ApiError from "../../errors/ApiError";
-
 import { jwtHelper } from "../../helpers/jwtHelper";
 import { prisma } from "../../shared/prisma";
 import emailSender from "./emailSender";
@@ -26,16 +25,17 @@ const login = async (payload: { email: string; password: string }) => {
   }
 
   const accessToken = jwtHelper.generateToken(
-    { email: user.email, role: user.role },
+    { userId: user.id, email: user.email, role: user.role },
     config.JWT.access_token_secret as Secret,
-    "1h"
+    config.JWT.access_token_expiration as string // "1d"
   );
-
+  console.log("accessToken", config.JWT.access_token_secret);
   const refreshToken = jwtHelper.generateToken(
-    { email: user.email, role: user.role },
+    { userId: user.id, email: user.email, role: user.role },
     config.JWT.refresh_token_secret as Secret,
-    "90d"
+    config.JWT.refresh_token_expiration as string
   );
+  console.log("refreshToken", config.JWT.refresh_token_secret);
 
   return {
     accessToken,

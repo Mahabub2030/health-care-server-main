@@ -1,6 +1,3 @@
-import { MaritalStatus } from "enum"
-import { Patient } from "user"
-import { BloodGroup, Gender } from "enum"
 
 model PatientHealthData {
   id                  String         @id @default(uuid())

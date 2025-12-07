@@ -1,4 +1,3 @@
-import { Doctor } from "user"
 
 model Specialties {
   id                String               @id @default(uuid())

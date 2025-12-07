@@ -1,5 +1,4 @@
-import { Appointment } from "appointment"
-import { Doctor } from "user"
+
 
 model Schedule {
   id              String             @id @default(uuid())
