@@ -5,7 +5,7 @@ import { prisma } from "../../shared/prisma";
 import { Admin, Doctor, Prisma, UserRole, UserStatus } from "@prisma/client";
 import { fileUploder } from "../../helpers/fileUploader";
 import { IOptions, paginationHelper } from "../../helpers/paginationHelper";
-import { IJWTPayload } from "../../types/common";
+import { IjwtPayload } from "../../types/common";
 import { userSearchableFields } from "./user.constant";
 
 const createPatient = async (req: Request) => {
@@ -14,6 +14,7 @@ const createPatient = async (req: Request) => {
     req.body.patient.profilePhoto = uploadResult?.secure_url;
   }
 
+  console.log("this all ocde ");
   const hashPassword = await bcrypt.hash(req.body.password, 10);
 
   const result = await prisma.$transaction(async (tnx) => {
@@ -23,7 +24,6 @@ const createPatient = async (req: Request) => {
         password: hashPassword,
       },
     });
-
     return await tnx.patient.create({
       data: req.body.patient,
     });
@@ -150,7 +150,7 @@ const getAllFromDB = async (params: any, options: IOptions) => {
   };
 };
 
-const getMyProfile = async (user: IJWTPayload) => {
+const getMyProfile = async (user: IjwtPayload) => {
   const userInfo = await prisma.user.findUniqueOrThrow({
     where: {
       email: user.email,
@@ -213,7 +213,7 @@ const changeProfileStatus = async (
   return updateUserStatus;
 };
 
-const updateMyProfie = async (user: IJWTPayload, req: Request) => {
+const updateMyProfie = async (user: IjwtPayload, req: Request) => {
   const userInfo = await prisma.user.findUniqueOrThrow({
     where: {
       email: user?.email,

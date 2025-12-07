@@ -1,4 +1,4 @@
-import jwt, { JwtPayload, Secret, SignOptions } from "jsonwebtoken";
+import jwt, { jwtPayload, Secret, SignOptions } from "jsonwebtoken";
 
 const generateToken = (payload: any, secret: Secret, expiresIn: string) => {
   console.log("GenerateToken SECRET:", secret);
@@ -14,7 +14,7 @@ const generateToken = (payload: any, secret: Secret, expiresIn: string) => {
 const verifyToken = (token: string, secret: Secret) => {
   console.log("VerifyToken SECRET:", secret);
 
-  return jwt.verify(token, secret) as JwtPayload;
+  return jwt.verify(token, secret) as jwtPayload;
 };
 
 export const jwtHelper = {

@@ -2,9 +2,9 @@ import { PaymentStatus, UserRole } from "@prisma/client";
 import httpStatus from "http-status";
 import ApiError from "../../errors/ApiError";
 import { prisma } from "../../shared/prisma";
-import { IJWTPayload } from "../../types/common";
+import { IjwtPayload } from "../../types/common";
 
-const fetchDashboardMetaData = async (user: IJWTPayload) => {
+const fetchDashboardMetaData = async (user: IjwtPayload) => {
   let metadata;
   switch (user.role) {
     case UserRole.ADMIN:
@@ -23,7 +23,7 @@ const fetchDashboardMetaData = async (user: IJWTPayload) => {
   return metadata;
 };
 
-const getDoctorMetaData = async (user: IJWTPayload) => {
+const getDoctorMetaData = async (user: IjwtPayload) => {
   const doctorData = await prisma.doctor.findUniqueOrThrow({
     where: {
       email: user?.email,
@@ -84,7 +84,7 @@ const getDoctorMetaData = async (user: IJWTPayload) => {
   };
 };
 
-const getPatientMetaData = async (user: IJWTPayload) => {
+const getPatientMetaData = async (user: IjwtPayload) => {
   const patientData = await prisma.patient.findUniqueOrThrow({
     where: {
       email: user?.email,

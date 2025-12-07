@@ -3,7 +3,7 @@ import { addHours, addMinutes, format } from "date-fns";
 
 import { IOptions, paginationHelper } from "../../helpers/paginationHelper";
 import { prisma } from "../../shared/prisma";
-import { IJWTPayload } from "../../types/common";
+import { IjwtPayload } from "../../types/common";
 
 const insertIntoDB = async (payload: any) => {
   const { startTime, endTime, startDate, endDate } = payload;
@@ -67,7 +67,7 @@ const insertIntoDB = async (payload: any) => {
 };
 
 const schedulesForDoctor = async (
-  user: IJWTPayload,
+  user: IjwtPayload,
   fillters: any,
   options: IOptions
 ) => {

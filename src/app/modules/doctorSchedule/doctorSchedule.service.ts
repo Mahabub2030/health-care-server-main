@@ -3,10 +3,10 @@ import httpStatus from "http-status";
 import ApiError from "../../errors/ApiError";
 import { IOptions, paginationHelper } from "../../helpers/paginationHelper";
 import { prisma } from "../../shared/prisma";
-import { IJWTPayload } from "../../types/common";
+import { IjwtPayload } from "../../types/common";
 
 const insertIntoDB = async (
-  user: IJWTPayload,
+  user: IjwtPayload,
   payload: {
     scheduleIds: string[];
   }
@@ -30,7 +30,7 @@ const insertIntoDB = async (
 const getMySchedule = async (
   filters: any,
   options: IOptions,
-  user: IJWTPayload
+  user: IjwtPayload
 ) => {
   const { limit, page, skip } = paginationHelper.calculatePagination(options);
   const { startDate, endDate, ...filterData } = filters;
@@ -108,7 +108,7 @@ const getMySchedule = async (
   };
 };
 
-const deleteFromDB = async (user: IJWTPayload, scheduleId: string) => {
+const deleteFromDB = async (user: IjwtPayload, scheduleId: string) => {
   const doctorData = await prisma.doctor.findUniqueOrThrow({
     where: {
       email: user?.email,

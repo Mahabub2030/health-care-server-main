@@ -21,7 +21,7 @@ const auth = (...roles: string[]) => {
 
       const verifyUser = jwtHelper.verifyToken(
         token,
-        config.JWT.access_token_secret as Secret
+        config.jwt.jwt_secret as Secret
       );
 
       req.user = verifyUser;
@@ -37,6 +37,6 @@ const auth = (...roles: string[]) => {
   };
 };
 
-console.log("Secret used for verification:", config.JWT.access_token_secret);
+console.log("Secret used for verification:", config.jwt.jwt_secret);
 
 export default auth;

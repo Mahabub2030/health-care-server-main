@@ -3,15 +3,15 @@ import httpStatus from "http-status";
 import pick from "../../helpers/pick";
 import catchAsync from "../../shared/catchAsync";
 import sendResponse from "../../shared/sendResponse";
-import { IJWTPayload } from "../../types/common";
+import { IjwtPayload } from "../../types/common";
 import { scheduleFilterableFields } from "./doctorSchedule.constant";
 import { DoctorScheduleService } from "./doctorSchedule.service";
 
 const insertIntoDB = catchAsync(
-  async (req: Request & { user?: IJWTPayload }, res: Response) => {
+  async (req: Request & { user?: IjwtPayload }, res: Response) => {
     const user = req.user;
     const result = await DoctorScheduleService.insertIntoDB(
-      user as IJWTPayload,
+      user as IjwtPayload,
       req.body
     );
 
@@ -25,7 +25,7 @@ const insertIntoDB = catchAsync(
 );
 
 const getMySchedule = catchAsync(
-  async (req: Request & { user?: IJWTPayload }, res: Response) => {
+  async (req: Request & { user?: IjwtPayload }, res: Response) => {
     const filters = pick(req.query, ["startDate", "endDate", "isBooked"]);
     const options = pick(req.query, ["limit", "page", "sortBy", "sortOrder"]);
 
@@ -33,7 +33,7 @@ const getMySchedule = catchAsync(
     const result = await DoctorScheduleService.getMySchedule(
       filters,
       options,
-      user as IJWTPayload
+      user as IjwtPayload
     );
 
     sendResponse(res, {
@@ -46,11 +46,11 @@ const getMySchedule = catchAsync(
 );
 
 const deleteFromDB = catchAsync(
-  async (req: Request & { user?: IJWTPayload }, res: Response) => {
+  async (req: Request & { user?: IjwtPayload }, res: Response) => {
     const user = req.user;
     const { id } = req.params;
     const result = await DoctorScheduleService.deleteFromDB(
-      user as IJWTPayload,
+      user as IjwtPayload,
       id
     );
 

@@ -9,10 +9,10 @@ import ApiError from "../../errors/ApiError";
 
 import { IOptions, paginationHelper } from "../../helpers/paginationHelper";
 import { prisma } from "../../shared/prisma";
-import { IJWTPayload } from "../../types/common";
+import { IjwtPayload } from "../../types/common";
 
 const createPrescription = async (
-  user: IJWTPayload,
+  user: IjwtPayload,
   payload: Partial<Prescription>
 ) => {
   const appointmentData = await prisma.appointment.findUniqueOrThrow({
@@ -50,7 +50,7 @@ const createPrescription = async (
   return result;
 };
 
-const patientPrescription = async (user: IJWTPayload, options: IOptions) => {
+const patientPrescription = async (user: IjwtPayload, options: IOptions) => {
   const { limit, page, skip, sortBy, sortOrder } =
     paginationHelper.calculatePagination(options);
 

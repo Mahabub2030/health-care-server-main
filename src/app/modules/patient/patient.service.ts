@@ -2,7 +2,7 @@ import { Patient, Prisma, UserStatus } from "@prisma/client";
 
 import { IOptions, paginationHelper } from "../../helpers/paginationHelper";
 import { prisma } from "../../shared/prisma";
-import { IJWTPayload } from "../../types/common";
+import { IjwtPayload } from "../../types/common";
 import { patientSearchableFields } from "./patient.constant";
 import { IPatientFilterRequest } from "./patient.interface";
 
@@ -103,7 +103,7 @@ const softDelete = async (id: string): Promise<Patient | null> => {
 
 // PatientHealthData, MedicalReport, patient
 
-const updateIntoDB = async (user: IJWTPayload, payload: any) => {
+const updateIntoDB = async (user: IjwtPayload, payload: any) => {
   const { medicalReport, patientHealthData, ...patientData } = payload;
 
   const patientInfo = await prisma.patient.findUniqueOrThrow({

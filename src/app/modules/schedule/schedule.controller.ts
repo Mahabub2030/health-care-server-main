@@ -4,7 +4,7 @@ import sendResponse from "../../shared/sendResponse";
 import { ScheduleService } from "./schedule.service";
 
 import pick from "../../helpers/pick";
-import { IJWTPayload } from "../../types/common";
+import { IjwtPayload } from "../../types/common";
 
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
   const result = await ScheduleService.insertIntoDB(req.body);
@@ -18,13 +18,13 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
 });
 
 const schedulesForDoctor = catchAsync(
-  async (req: Request & { user?: IJWTPayload }, res: Response) => {
+  async (req: Request & { user?: IjwtPayload }, res: Response) => {
     const options = pick(req.query, ["page", "limit", "sortBy", "sortOrder"]);
     const fillters = pick(req.query, ["startDateTime", "endDateTime"]);
 
     const user = req.user;
     const result = await ScheduleService.schedulesForDoctor(
-      user as IJWTPayload,
+      user as IjwtPayload,
       fillters,
       options
     );

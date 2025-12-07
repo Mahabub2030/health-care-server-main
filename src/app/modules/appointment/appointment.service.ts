@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { prisma } from "../../shared/prisma";
-import { IJWTPayload } from "../../types/common";
+import { IjwtPayload } from "../../types/common";
 
 import {
   AppointmentStatus,
@@ -14,7 +14,7 @@ import { IOptions, paginationHelper } from "../../helpers/paginationHelper";
 import { stripe } from "../../helpers/stripe";
 
 const createAppointment = async (
-  user: IJWTPayload,
+  user: IjwtPayload,
   payload: { doctorId: string; scheduleId: string }
 ) => {
   const patientData = await prisma.patient.findUniqueOrThrow({
@@ -103,7 +103,7 @@ const createAppointment = async (
 };
 
 const getMyAppointment = async (
-  user: IJWTPayload,
+  user: IjwtPayload,
   filters: any,
   options: IOptions
 ) => {
@@ -170,7 +170,7 @@ const getMyAppointment = async (
 const updateAppointmentStatus = async (
   appointmentId: string,
   status: AppointmentStatus,
-  user: IJWTPayload
+  user: IjwtPayload
 ) => {
   const appointmentData = await prisma.appointment.findUniqueOrThrow({
     where: {
