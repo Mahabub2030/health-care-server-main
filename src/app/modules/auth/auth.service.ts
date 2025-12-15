@@ -1,12 +1,12 @@
 import { UserStatus } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import httpStatus from "http-status";
 import { Secret } from "jsonwebtoken";
+import { prisma } from "../../shared/prisma";
+
+import httpStatus from "http-status";
 import config from "../../../config";
 import ApiError from "../../errors/ApiError";
-
 import { jwtHelper } from "../../helpers/jwtHelper";
-import { prisma } from "../../shared/prisma";
 import emailSender from "./emailSender";
 
 const login = async (payload: { email: string; password: string }) => {
@@ -77,10 +77,9 @@ const refreshToken = async (token: string) => {
   };
 };
 
-const changePassword = async (userId: any, user: any, payload: any) => {
+const changePassword = async (user: any, payload: any) => {
   const userData = await prisma.user.findUniqueOrThrow({
     where: {
-      id: user.userId,
       email: user.email,
       status: UserStatus.ACTIVE,
     },
